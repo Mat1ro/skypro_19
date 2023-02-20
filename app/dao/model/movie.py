@@ -9,11 +9,11 @@ class Movie(db.Model):
     title = db.Column(db.String(255))
     description = db.Column(db.String(255))
     trailer = db.Column(db.Integer())
-    year = db.Colomn(db.Integer())
-    rating = db.Colomn(db.Float())
-    genre_id = db.Colomn(db.Integer(), db.ForeignKey("genre.id"))
+    year = db.Column(db.Integer())
+    rating = db.Column(db.Float())
+    genre_id = db.Column(db.Integer(), db.ForeignKey("genre.id"))
     genre = db.relationship("Genre")
-    director_id = db.Colomn(db.Integer(), db.ForeignKey('director.id'))
+    director_id = db.Column(db.Integer(), db.ForeignKey('director.id'))
     director = db.relationship("Director")
 
 

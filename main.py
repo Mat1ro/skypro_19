@@ -2,13 +2,13 @@ from flask import Flask
 from flask_restx import Api
 
 from config import Config
-from dao.model.director import Director
-from dao.model.genre import Genre
-from dao.model.movie import Movie
+from app.dao.model.director import Director
+from app.dao.model.genre import Genre
+from app.dao.model.movie import Movie
 from setup_db import db
-from views.director import director_ns
-from views.genre import genre_ns
-from views.movie import movie_ns
+from app.views.director import director_ns
+from app.views.genre import genre_ns
+from app.views.movie import movie_ns
 
 
 def create_app(config_object):
@@ -29,9 +29,55 @@ def register_extensions(app):
 
 def create_data(app, db):
     with app.app_context():
+        db.drop_all()
         db.create_all()
         data = {
             "movies": [{
+                "title": "Йеллоустоун",
+                "description": "Владелец ранчо пытается сохранить землю своих предков. Кевин Костнер в неовестерне от автора «Ветреной реки»",
+                "trailer": "https://www.youtube.com/watch?v=UKei_d0cbP4",
+                "year": 2018,
+                "rating": 8.6,
+                "genre_id": 17,
+                "director_id": 1,
+                "pk": 1
+            }, {
+                "title": "Омерзительная восьмерка",
+                "description": "США после Гражданской войны. Легендарный охотник за головами Джон Рут по кличке Вешатель конвоирует заключенную. По пути к ним прибиваются еще несколько путешественников. Снежная буря вынуждает компанию искать укрытие в лавке на отшибе, где уже расположилось весьма пестрое общество: генерал конфедератов, мексиканец, ковбой… И один из них - не тот, за кого себя выдает.",
+                "trailer": "https://www.youtube.com/watch?v=lmB9VWm0okU",
+                "year": 2015,
+                "rating": 7.8,
+                "genre_id": 4,
+                "director_id": 2,
+                "pk": 2
+            }, {
+                "title": "Вооружен и очень опасен",
+                "description": "События происходят в конце XIX века на Диком Западе, в Америке. В основе сюжета — сложные перипетии жизни работяги — старателя Габриэля Конроя. Найдя нефть на своем участке, он познает и счастье, и разочарование, и опасность, и отчаяние...",
+                "trailer": "https://www.youtube.com/watch?v=hLA5631F-jo",
+                "year": 1978,
+                "rating": 6,
+                "genre_id": 17,
+                "director_id": 3,
+                "pk": 3
+            }, {
+                "title": "Джанго освобожденный",
+                "description": "Эксцентричный охотник за головами, также известный как Дантист, промышляет отстрелом самых опасных преступников. Работенка пыльная, и без надежного помощника ему не обойтись. Но как найти такого и желательно не очень дорогого? Освобождённый им раб по имени Джанго – прекрасная кандидатура. Правда, у нового помощника свои мотивы – кое с чем надо сперва разобраться.",
+                "trailer": "https://www.youtube.com/watch?v=2Dty-zwcPv4",
+                "year": 2012,
+                "rating": 8.4,
+                "genre_id": 17,
+                "director_id": 2,
+                "pk": 4
+            }, {
+                "title": "Рокетмен",
+                "description": "История превращения застенчивого парня Реджинальда Дуайта, талантливого музыканта из маленького городка, в суперзвезду и культовую фигуру мировой поп-музыки Элтона Джона.",
+                "trailer": "https://youtu.be/VISiqVeKTq8",
+                "year": 2019,
+                "rating": 7.3,
+                "genre_id": 18,
+                "director_id": 4,
+                "pk": 5
+            }, {
                 "title": "Бурлеск",
                 "description": "Али - молодая амбициозная девушка из маленького городка с чудесным голосом, совсем недавно потеряла своих родителей. Теперь никому не нужная, она отправляется в большой город Лос-Анджелес, где устраивается на работу у Тесс, хозяйки ночного клуба «Бурлеск». За короткое время она находит друзей, поклонников и любовь всей своей жизни. Но может ли сказка длиться вечно? Ведь немало людей завидует этой прекрасной танцовщице...",
                 "trailer": "https://www.youtube.com/watch?v=sgOhxneHkiE",
@@ -186,34 +232,27 @@ def create_data(app, db):
                 {"name": "Мелодрама", "pk": 13}, {"name": "Детектив", "pk": 14}, {"name": "Авторское кино", "pk": 15},
                 {"name": "Мультфильм", "pk": 16}, {"name": "Вестерн", "pk": 17}, {"name": "Мюзикл", "pk": 18}],
         }
-        # -------------------------------------------------------
-
         for movie in data["movies"]:
             m = Movie(
-                id=movie["pk"],
                 title=movie["title"],
                 description=movie["description"],
                 trailer=movie["trailer"],
                 year=movie["year"],
                 rating=movie["rating"],
                 genre_id=movie["genre_id"],
-                director_id=movie["director_id"],
+                director_id=movie["director_id"]
             )
             with db.session.begin():
                 db.session.add(m)
-
         for director in data["directors"]:
             d = Director(
-                id=director["pk"],
-                name=director["name"],
+                name=director["name"]
             )
             with db.session.begin():
                 db.session.add(d)
-
         for genre in data["genres"]:
             d = Genre(
-                id=genre["pk"],
-                name=genre["name"],
+                name=genre["name"]
             )
             with db.session.begin():
                 db.session.add(d)
@@ -225,5 +264,3 @@ app.url_map.strict_slashes = False
 
 if __name__ == '__main__':
     app.run(host="localhost", port=10001, debug=True)
-
-
