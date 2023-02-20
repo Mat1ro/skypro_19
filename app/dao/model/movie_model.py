@@ -5,6 +5,7 @@ from setup_db import db
 
 class Movie(db.Model):
     __tablename__ = 'movie'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(255))
     description = db.Column(db.String(255))
@@ -18,7 +19,8 @@ class Movie(db.Model):
 
 
 class MovieSchema(Schema):
-    title = fields.Int()
+    id = fields.Int()
+    title = fields.Str()
     description = fields.Str()
     trailer = fields.Str()
     year = fields.Int()
