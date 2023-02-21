@@ -11,6 +11,15 @@ class MovieService:
     def get_all(self):
         return self.dao.get_all()
 
+    def get_by_director_id(self, director_id):
+        return self.dao.get_by_director_id(director_id)
+
+    def get_by_genre_id(self, genre_id):
+        return self.dao.get_by_genre_id(genre_id)
+
+    def get_by_year(self, year):
+        return self.dao.get_by_year(year)
+
     def create(self, data):
         return self.dao.create(data)
 
